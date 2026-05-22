@@ -1,0 +1,25 @@
+{
+  "_comment_": "Paste the hooks.Stop and hooks.Notification entries into your ~/.claude/settings.json. If the hook arrays already exist, append these as additional entries; do not replace existing entries. The `klaxon` skill itself is invoked by Claude when needed, not wired as a hook.",
+  "hooks": {
+    "Stop": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "~/.claude/skills/klaxon/scripts/play.sh Tink"
+          }
+        ]
+      }
+    ],
+    "Notification": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "~/.claude/skills/klaxon/scripts/play.sh Sosumi"
+          }
+        ]
+      }
+    ]
+  }
+}
