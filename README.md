@@ -7,7 +7,7 @@ A collection of [Claude Code](https://claude.com/claude-code) skills I've built 
 - **[`docs-update`](docs-update/SKILL.md)**: at the end of a work session in a repo with a multi-file doc set (3+ of README/CLAUDE/CONTEXT/ARCHITECTURE/DECISIONS/WORKLOG/TODO), routes each change to the right doc. Appends to WORKLOG, edits TODO, records decisions, updates ARCHITECTURE, adds glossary terms.
 - **[`context-md`](context-md/SKILL.md)**: bootstraps and maintains a per-repo `CONTEXT.md` glossary, the ubiquitous-language layer for a project. Three modes: `init` (new), `update` (sharpen mid-session), `audit` (check against code). `docs-update` delegates glossary edits to it.
 - **[`open-source-skill`](open-source-skill/SKILL.md)**: takes one of your internal markdown artifacts (a skill, slash command, prompt template, hook README) and ships a public, shareable version of it. A 6-category scrub checklist, an upfront-decisions structure, and a build-local-then-push-on-approval discipline. Has a lead-magnet variant.
-- **[`urgent`](urgent/README.md)**: a three-tier audio attention system. Tink on every turn end, Sosumi when Claude Code waits on you, triple Submarine when Claude decides it really needs you. Includes a logger that records every chime + its parent process, and a suppression rule that silently drops chimes from headless `claude -p` subprocesses (scheduled prompts, queue workers) so they do not drown the signal.
+- **[`klaxon`](klaxon/README.md)**: a three-tier audio attention system. Tink on every turn end, Sosumi when Claude Code waits on you, triple Submarine when Claude decides it really needs you. Includes a logger that records every chime + its parent process, and a suppression rule that silently drops chimes from headless `claude -p` subprocesses (scheduled prompts, queue workers) so they do not drown the signal.
 
 `docs-update` and `context-md` are a matched pair; you can install either alone, but they pair well.
 
@@ -37,9 +37,9 @@ Claude triggers each one from natural language, or you can invoke them explicitl
 | `docs-update` | `/docs-update` | "catch up the docs", "the docs are stale", "wrap up and log this" |
 | `context-md` | `/context-md` | "set up the glossary", "what do we call X", "audit our CONTEXT.md" |
 | `open-source-skill` | `/open-source-skill` | "open source this skill", "publish this publicly", "turn this into a lead magnet" |
-| `urgent` | `/urgent` | (autonomous) Claude fires when forward progress is blocked on you AND consequences exist if you do not see it soon |
+| `klaxon` | `/klaxon` | (autonomous) Claude fires when forward progress is blocked on you AND consequences exist if you do not see it soon |
 
-All three doc/publishing skills preview their changes before writing or pushing, and the publishing skill waits for an explicit go-ahead before any outward action. `urgent` is the one skill Claude fires by itself; it logs every fire so you can audit overuse.
+All three doc/publishing skills preview their changes before writing or pushing, and the publishing skill waits for an explicit go-ahead before any outward action. `klaxon` is the one skill Claude fires by itself; it logs every fire so you can audit overuse.
 
 ## Credit
 

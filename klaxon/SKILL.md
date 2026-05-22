@@ -1,10 +1,10 @@
 ---
-name: urgent
-description: Fire a loud triple-Submarine alert when Claude genuinely needs the user's attention RIGHT NOW. Use sparingly. Triggers when forward progress is blocked on the user specifically AND consequences exist if they do not see it soon. Examples: about to take an irreversible action and need explicit approval, prod incident discovered mid-task, deploy gate waiting on real-eyes sign-off, long-running operation idled waiting on input for more than two turns. Also fires on `/urgent` for manual testing. Skip for normal turn-end chimes (the Stop hook covers that) and routine clarifying questions (the Notification hook covers that). Skip entirely in headless `claude -p` contexts where no human is watching.
+name: klaxon
+description: Fire a loud triple-Submarine alert when Claude genuinely needs the user's attention RIGHT NOW. Use sparingly. Triggers when forward progress is blocked on the user specifically AND consequences exist if they do not see it soon. Examples: about to take an irreversible action and need explicit approval, prod incident discovered mid-task, deploy gate waiting on real-eyes sign-off, long-running operation idled waiting on input for more than two turns. Also fires on `/klaxon` for manual testing. Skip for normal turn-end chimes (the Stop hook covers that) and routine clarifying questions (the Notification hook covers that). Skip entirely in headless `claude -p` contexts where no human is watching.
 allowed-tools: Bash
 ---
 
-# urgent: "I REALLY need your attention"
+# klaxon: "I REALLY need your attention"
 
 Triple-ping the macOS Submarine system sound with 1.333s pauses. Every fire is logged with timestamp, parent process, and reason to `~/.claude/logs/audio-hook.log`, so the user can audit overuse.
 
@@ -39,14 +39,14 @@ Skip for:
 ## How to fire
 
 ```bash
-~/.claude/skills/urgent/scripts/urgent.sh "short reason for the audit log"
+~/.claude/skills/klaxon/scripts/klaxon.sh "short reason for the audit log"
 ```
 
-The reason string lands in `~/.claude/logs/audio-hook.log` under the `URGENT triple-ping` header so the user can audit calibration. If you fired it for something that did not deserve three Submarines, expect to be called out and dial back.
+The reason string lands in `~/.claude/logs/audio-hook.log` under the `KLAXON triple-ping` header so the user can audit calibration. If you fired it for something that did not deserve three Submarines, expect to be called out and dial back.
 
 ## Manual trigger
 
-User typing `/urgent` should fire `~/.claude/skills/urgent/scripts/urgent.sh "manual test"`. Smoke test for the chain.
+User typing `/klaxon` should fire `~/.claude/skills/klaxon/scripts/klaxon.sh "manual test"`. Smoke test for the chain.
 
 ## Companion hooks (recommended bundle)
 
