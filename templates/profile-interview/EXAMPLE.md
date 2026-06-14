@@ -4,7 +4,7 @@ This is what the interview produces. The person below is fictional (Jordan Reyes
 
 ---
 
-# Jordan Reyes — Working Profile
+# Jordan Reyes: Working Profile
 
 ## How to talk to me
 - **Voice:** Warm & encouraging, with a bit of bluntness when I'm about to make a mistake. Sentence case. Notice when something's working, don't only flag problems.

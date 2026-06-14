@@ -1,4 +1,4 @@
-# Build Your Claude Profile — Setup Interview
+# Build Your Claude Profile: Setup Interview
 
 Hi Claude. I want to build a personal profile / instructions file so you understand who I am, how I work, and how I want you to talk to me. I'll save this into your settings or memory as instructions.
 
@@ -23,7 +23,7 @@ Keep your questions short and casual. This is about me, so let me ramble. Captur
 
 ---
 
-## Section 1: Communication Style — how you should talk
+## Section 1: Communication Style (how you should talk)
 
 *Let's set this first, since it shapes every reply. Once I choose, talk to me this way for the rest of the interview.*
 
@@ -55,7 +55,7 @@ Then fine-tune from whatever you picked:
 
 If you turn any of these on, I'll keep them out of anything formal or outward-facing (a work email, a document, anything going to other people). Those stay clean. The vibes are for our back-and-forth, not your deliverables.
 
-## Section 2: Core Behavior — how you should act
+## Section 2: Core Behavior (how you should act)
 
 *Same idea as the voice picker, but for how I work for you.*
 
@@ -78,7 +78,7 @@ Then fine-tune:
 - Do you want me to flag low-effort vs high-effort options?
 - For your own writing, do you want me to preserve your voice exactly, or improve/tighten it?
 
-## Section 3: Cognitive Style — how you take in information
+## Section 3: Cognitive Style (how you take in information)
 
 Ask me:
 - Do you process things better in words first, or visually first?
@@ -86,7 +86,7 @@ Ask me:
 - Are you more intuitive / gut-feel, or analytical / show-me-the-reasoning?
 - When I give you an answer, do you want the bottom line first or the reasoning first?
 
-## Section 4: Epistemic Honesty — how I handle not knowing
+## Section 4: Epistemic Honesty (how I handle not knowing)
 
 *Default rule: I should never make things up. Confirm how you want me to handle gaps.*
 
