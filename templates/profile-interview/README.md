@@ -19,6 +19,9 @@ Claude adopts your picks immediately and runs the *rest* of the interview in tha
 - **Menus beat blank pages.** "Describe your ideal tone" is hard. "Pick A, B, C, or D, here's a preview of each" is easy, especially on a phone.
 - **Sensitive stuff comes later, on purpose.** Family, health, finances, and relationships sit after the tone is set, once there's a little rapport, and every one is skippable.
 - **Two standing guardrails are baked in.** Don't invent facts about your life (ask, or say "I don't know"), and trust the live conversation over the stale profile. These are the rules that keep an assistant trustworthy over time.
+- **The output is self-contained.** Future chats load only the finished profile, never this interview. So the assembly step bakes every actual choice into the document (no "the voice you picked"), sweeps the whole conversation for things you said in passing, and produces one file a fresh Claude can act on cold.
+- **It builds in passes, with an adversarial review.** Claude drafts the profile, then re-reads the entire conversation as a skeptical second reader hunting for dropped details, vague spots, and contradictions, before showing you the result. An independent reviewer (a fresh chat or a different model) is even stronger.
+- **It forms memories alongside the file.** Where the surface supports persistent memory, Claude saves the durable facts as memories too, so the profile and memory back each other up. Where it doesn't, the profile is the single source of truth, which is why completeness matters.
 - **It plans for going stale.** The last section sets up when to refresh, and the hand-off tells you how to actually save the result so Claude loads it next time.
 
 ## How to use it

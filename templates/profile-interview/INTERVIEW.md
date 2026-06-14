@@ -231,8 +231,42 @@ Ask me:
 
 ---
 
-## Final step
+## Final step: build the profile (multi-pass)
 
-Once you've got my answers, assemble everything into a single clean profile document using these section headings, written in third person or instruction form (whatever reads better), and show it to me to review and edit. Drop any section I skipped.
+This is the part that has to outlast the conversation. Future chats will load **only the finished profile**, never this interview and never our back-and-forth. Anything useful that lives only in my answers, or in the questions above, is gone unless you write it into the profile itself. So build it like I'll never see this file again, because in those future chats, you won't. The goal is one self-contained document that has *everything* a fresh Claude needs about me in one spot.
 
-Then tell me how to actually save it so you'll see it in future conversations, since a profile only helps if it's loaded. If I'm on claude.ai, that usually means pasting it into Settings > Personal preferences, or creating a Project and putting it in the project instructions. If I'm using Claude Code, it goes in a `CLAUDE.md`. If I'm in a different app, tell me where its equivalent lives. Also ask me whether I want you to remember new things about me across sessions (and how to turn that on), so the profile can grow instead of going stale.
+Do it in passes. Don't rush to the first draft and stop.
+
+**Pass 1: assemble the draft.**
+Pull everything I told you into one clean profile document, using the section headings above (drop any I skipped). Write it as my standing instructions to you, first person or instruction form, whatever reads better. Rules for this pass:
+- **Make it fully self-contained.** Bake in the actual choices, never references to them. Don't write "the voice you picked" or "as we discussed" or "your earlier answer." Write the actual voice, the actual banned words, the actual working style, spelled out in full. A fresh Claude with zero memory of this conversation should read it and act exactly right.
+- **Capture everything, not just the headline answers.** Sweep the whole conversation, not only my direct replies to each question. Things I mentioned in passing, a constraint I dropped mid-ramble, a preference implied by how I reacted to something, the way I phrased a thing: fold those in too. Over-capture. It's easier for me to delete a line than to remember what I forgot to tell you.
+- **Keep my voice.** Use my actual words and phrasing where you can. Don't formalize me into a stranger.
+
+**Pass 2: adversarial review.**
+Now turn on the draft. Re-read the entire conversation from the top against the profile you just wrote, as a second, skeptical Claude whose only job is to catch what the first one missed. (If I can swing it, the strongest version of this is a genuinely independent reviewer: a fresh Claude conversation, or a different model, reading the profile cold. An outside reader catches things the author rationalizes past.) Hunt specifically for:
+- Details that came up in conversation but never made it into a section.
+- Anything vague that should be concrete: a "sometimes," a "kind of," a half-named tool, a person mentioned but not pinned down.
+- Contradictions, or places where something I said later updated something I said earlier. Keep the latest.
+- Any spot where the profile leans on this conversation to make sense (references the interview, the menu, "what you told me before"). Rewrite those to stand alone.
+- Sensitive things I shared (health, family, finances, names) that maybe shouldn't be written down verbatim in a file that lives in your instructions. Flag those and ask me before including them.
+
+List what this pass caught, then fold the fixes in. Done properly this almost always surfaces three to six things the first draft dropped.
+
+**Pass 3: show me the result.**
+Present the finished, self-contained profile as one clean markdown artifact I can save, plus a short note on what the review pass added or changed, so I can sanity-check it. Let me edit before we lock it.
+
+## Form memories as we go
+
+Separate from the profile file: if this version of you can remember things across sessions, save the durable facts about me as memories too, both as they come up (if that's natural) and as a final sweep at the end. My name, how I want to be talked to, the hard constraints, the big ongoing situation, the stuff that won't change next week. The profile and the memories back each other up: if one surface loses the file, the other still knows me.
+
+If you *can't* persist memory where I'm running you, say so plainly. Then the profile file is the single source of truth, which is exactly why Pass 1 and Pass 2 have to be complete. Either way, ask me before saving anything sensitive.
+
+## Then tell me how to save it
+
+A profile only helps if it's actually loaded. Tell me where this goes for whatever I'm using:
+- **claude.ai:** Settings > Personal preferences, or a Project's instructions if I want it scoped to one project.
+- **Claude Code:** a `CLAUDE.md` (project root for one repo, or `~/.claude/CLAUDE.md` for all projects).
+- **A different app:** wherever its custom-instructions or system-prompt equivalent lives. Tell me where.
+
+And ask whether I want memory turned on for the future (and how), so the profile can grow with me instead of going stale.
