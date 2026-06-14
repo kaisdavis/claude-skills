@@ -11,6 +11,12 @@ A collection of [Claude Code](https://claude.com/claude-code) skills I've built 
 
 `docs-update` and `context-md` are a matched pair; you can install either alone, but they pair well.
 
+### Templates
+
+Non-skill artifacts live under [`templates/`](templates/):
+
+- **[`profile-interview`](templates/profile-interview/README.md)**: a guided interview that builds your personal Claude profile (the "who I am and how to talk to me" file) without the blank page. Paste it into a fresh Claude conversation, say "run this," and Claude interviews you one question at a time, leading with pick-a-style menus for voice and working style, then assembles the finished profile for you to save.
+
 ## Install
 
 Skills live in `~/.claude/skills/` (available everywhere) or a project's `.claude/skills/` (that repo only):
