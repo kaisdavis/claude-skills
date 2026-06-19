@@ -35,6 +35,20 @@ printf '[%s] sound=%-10s suppress=%-22s ppid=%s ppid_cmd=%q gppid=%s gppid_cmd=%
   "$TS" "$SOUND" "${SUPPRESS:-played}" "$PPID" "$PARENT_CMD" "$GPPID" "$GP_CMD" >> "$LOG"
 
 if [ -z "$SUPPRESS" ]; then
-  # Use absolute path so this works even when a shadowed afplay is on PATH.
-  /usr/bin/afplay "$SOUND_PATH" &
+  # Absolute path so this works even when a shadowed afplay is on PATH.
+  #
+  # Detach ALL of afplay's std{in,out,err} from the inherited pipes. This script
+  # runs as a Stop/Notification hook (and the klaxon fires it 3x back-to-back):
+  # Claude Code waits for the hook's stdout to hit EOF before the hook is "done".
+  # A bare `afplay &` leaves the backgrounded afplay holding the hook's stdout fd,
+  # so if afplay wedges (audio device contention / unavailable output device) the
+  # pipe never closes and Claude Code blocks forever on "running stop hooks".
+  # Detaching the fds makes the hook return instantly regardless of afplay's fate.
+  /usr/bin/afplay "$SOUND_PATH" >/dev/null 2>&1 </dev/null &
+  ap=$!
+  # Watchdog: a system sound is <2s; if afplay is still alive after 10s the audio
+  # device is wedged. Kill it so stuck players can't accumulate (the rapid triple-
+  # ping makes pile-up the failure mode). Fully detached so it never holds the
+  # hook open either.
+  ( sleep 10; kill "$ap" 2>/dev/null ) >/dev/null 2>&1 </dev/null &
 fi
