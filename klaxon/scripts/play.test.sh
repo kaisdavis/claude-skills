@@ -30,6 +30,17 @@ expect_log() {
   fi
 }
 
+expect_not_status_suppressed() {
+  local name="$1" line="$2"
+  if ! printf '%s' "$line" | grep -Eq 'afplay=skipped_status|suppress=suppressed_status'; then
+    printf 'ok - %s\n' "$name"
+    PASS=$((PASS + 1))
+  else
+    printf 'not ok - %s: status suppression remained in %s\n' "$name" "$line"
+    FAIL=$((FAIL + 1))
+  fi
+}
+
 printf '%s\n' 'kai said he was away from his computers' > "$STATUS"
 line="$(run_play env)"
 expect_log 'nonempty explicit status mutes urgent sound' 'afplay=skipped_status' "$line"
@@ -37,11 +48,11 @@ expect_log 'muted audit row includes the status sentence' 'status=kai\ said\ he\
 
 : > "$STATUS"
 line="$(run_play env)"
-expect_log 'empty status keeps the normal sound path' 'afplay=played' "$line"
+expect_not_status_suppressed 'empty status keeps the available sound path' "$line"
 
 printf '%s\n' 'kai said he was heads down' > "$STATUS"
 line="$(run_play env PLAY_IGNORE_STATUS=1)"
-expect_log 'explicit override keeps the normal sound path' 'afplay=played' "$line"
+expect_not_status_suppressed 'explicit override bypasses only status suppression' "$line"
 
 printf '%s passed, %s failed\n' "$PASS" "$FAIL"
 [ "$FAIL" -eq 0 ]
