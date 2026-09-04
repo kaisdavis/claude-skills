@@ -14,10 +14,14 @@
 #   subprocesses fire constantly in some setups (scheduled prompts, cron-like
 #   workers, automated pipelines) and would drown the user. Interactive sessions
 #   still chime normally.
+# A nonempty kai-status file from /afk, /focus, or /asleep mutes every sound
+# here until /back clears it. Kai's private kaibot player carries the same gate;
+# both paths need it so an explicit do-not-interrupt state wins over urgency.
 
 SOUND="${1:-Tink}"
 LOG="$HOME/.claude/logs/audio-hook.log"
 SOUND_PATH="/System/Library/Sounds/${SOUND}.aiff"
+STATUS_FILE="${KAI_STATUS_FILE:-$HOME/.kaibot/kai-status.txt}"
 
 mkdir -p "$(dirname "$LOG")"
 
@@ -31,6 +35,15 @@ case "$PARENT_CMD" in
   *"claude -p"*|*"claude --print"*) SUPPRESS="suppressed_headless" ;;
 esac
 
+# Any nonempty sentence means do not interrupt. PLAY_IGNORE_STATUS is only an
+# escape hatch for testing the unmuted branch without changing Kai's real state.
+STATUS_SUPPRESS=""
+STATUS_NOTE=""
+if [ "${PLAY_IGNORE_STATUS:-0}" != "1" ] && [ -s "$STATUS_FILE" ]; then
+  STATUS_SUPPRESS="suppressed_status"
+  STATUS_NOTE=$(head -1 "$STATUS_FILE" 2>/dev/null | cut -c1-40)
+fi
+
 # Remote detection: walk the process ancestry for a mosh-server or sshd. An
 # urgent klaxon should reach Kai wherever he actually is — if the session is
 # driven from another machine (laptop over mosh/ssh), this box's afplay speaker
@@ -38,7 +51,7 @@ esac
 # to the attached terminal instead, so we ring the bell EVERYWHERE but only
 # afplay when the session is local. (Mirrors ~/kaibot/scripts/audio/play.sh.)
 REMOTE=""
-if [ -z "$SUPPRESS" ]; then
+if [ -z "$SUPPRESS" ] && [ -z "$STATUS_SUPPRESS" ]; then
   _p="$PPID"; _hops=0
   while [ -n "$_p" ] && [ "$_p" != "1" ] && [ "$_hops" -lt 12 ]; do
     case "$(ps -o command= -p "$_p" 2>/dev/null)" in
@@ -50,18 +63,31 @@ if [ -z "$SUPPRESS" ]; then
 fi
 
 # Effective disposition for the audit log (field name kept as `suppress=` so
-# existing log readers don't break): headless wins, else remote, else played.
-DISP="${SUPPRESS:-${REMOTE:-played}}"
+# existing log readers don't break): headless wins, then explicit status,
+# remote, or played.
+if [ -n "$SUPPRESS" ]; then
+  DISP="$SUPPRESS"
+  AFPLAY_ACTION="skipped_headless"
+elif [ -n "$STATUS_SUPPRESS" ]; then
+  DISP="$STATUS_SUPPRESS"
+  AFPLAY_ACTION="skipped_status"
+elif [ -n "$REMOTE" ]; then
+  DISP="$REMOTE"
+  AFPLAY_ACTION="skipped_remote"
+else
+  DISP="played"
+  AFPLAY_ACTION="played"
+fi
 
-printf '[%s] sound=%-10s suppress=%-22s ppid=%s ppid_cmd=%q gppid=%s gppid_cmd=%q\n' \
-  "$TS" "$SOUND" "$DISP" "$PPID" "$PARENT_CMD" "$GPPID" "$GP_CMD" >> "$LOG"
+printf '[%s] sound=%-10s suppress=%-22s afplay=%-32s status=%q ppid=%s ppid_cmd=%q gppid=%s gppid_cmd=%q\n' \
+  "$TS" "$SOUND" "$DISP" "$AFPLAY_ACTION" "$STATUS_NOTE" "$PPID" "$PARENT_CMD" "$GPPID" "$GP_CMD" >> "$LOG"
 
 # Terminal bell — a BEL byte rides the tty stream, so an urgent ping sounds on
 # whichever machine currently owns the session: this box when local, the laptop
 # over mosh/ssh. Target the claude process's controlling tty explicitly
 # (/dev/ttysNNN); a hook does not reliably inherit /dev/tty. Headless has no
 # interactive tty, so the case below no-ops.
-if [ -z "$SUPPRESS" ]; then
+if [ -z "$SUPPRESS" ] && [ -z "$STATUS_SUPPRESS" ]; then
   _tty=$(ps -o tty= -p "$PPID" 2>/dev/null | tr -d ' ')
   case "$_tty" in
     ttys*) printf '\a' > "/dev/$_tty" 2>/dev/null ;;
@@ -70,7 +96,7 @@ fi
 
 # afplay fires only when the session is LOCAL to this box. A remote-driven
 # session already got its bell on the attached terminal above.
-if [ -z "$SUPPRESS" ] && [ -z "$REMOTE" ]; then
+if [ -z "$SUPPRESS" ] && [ -z "$STATUS_SUPPRESS" ] && [ -z "$REMOTE" ]; then
   # Absolute path so this works even when a shadowed afplay is on PATH.
   #
   # Detach ALL of afplay's std{in,out,err} from the inherited pipes. This script
